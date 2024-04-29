@@ -83,13 +83,13 @@ function Quickintro () {
     story.showPlayerChoices("Yes", "Maybe")
     if (story.checkLastAnswer("Yes")) {
         game.splash("Ok, here we go")
-        info.startCountdown(40)
+        info.startCountdown(30)
     } else if (story.checkLastAnswer("Maybe")) {
         game.splash("Get ready!!!")
         game.splash("3")
         game.splash("2")
         game.splash("1")
-        info.startCountdown(40)
+        info.startCountdown(30)
     }
 }
 let movingroadside2: Sprite = null
