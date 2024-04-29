@@ -5,8 +5,8 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, ot
     scene.cameraShake(4, 1000)
     pause(1000)
     music.play(music.melodyPlayable(music.smallCrash), music.PlaybackMode.UntilDone)
-    sprites.destroy(crashcar1)
-    heyAnswering("0")
+    sprites.destroy(otherSprite)
+    playerAnswer("0")
 })
 function checkAnswer (answer: string) {
     if (answer != "") {
@@ -25,10 +25,9 @@ function checkAnswer (answer: string) {
         }
         game.splash("Pick A or B")
         playerAnswer2 = game.askForString("", 1)
-        checkAnswer(playerAnswer2)
     }
 }
-function heyAnswering (answer: string) {
+function playerAnswer (answer: string) {
     if (answer != "") {
         correctAnswer = correctAnswers[currentQuestionIndex]
     }
@@ -95,22 +94,21 @@ function Quickintro () {
 }
 let movingroadside2: Sprite = null
 let movingroadside: Sprite = null
+let crashcar1: Sprite = null
 let coin: Sprite = null
 let playerAnswer2 = ""
 let correctAnswer = ""
-let crashcar1: Sprite = null
 let correctAnswers: string[] = []
 let options: string[][] = []
 let questions: string[] = []
 let currentQuestionIndex = 0
-let playerAnswer23 = ""
-let correctAnswer2 = ""
 let playerAnswer22 = ""
+let correctAnswer2 = ""
+let playerAnswer23 = ""
 currentQuestionIndex = 0
 questions = ["What is the shape of a stop sign?", "Who may use shared lanes?", "How often must motor vehicles be inspected?"]
 options = [["A)Octagon", "B)Circle"], ["A)Bicyclist", "B)Motorcyclist"], ["A)Once a year", "B)Once every two years "]]
 correctAnswers = ["a", "a", "a"]
-let list = [0, 1]
 let playerscar = sprites.create(img`
     . . . . . . a a c c a a . . . . 
     . . . . . a 3 3 3 3 3 3 a . . . 
@@ -136,6 +134,28 @@ tiles.setCurrentTilemap(tilemap`level6`)
 info.setScore(0)
 Quickintro()
 coinplacement()
+game.onUpdateInterval(12000, function () {
+    crashcar1 = sprites.createProjectileFromSide(img`
+        . . . . . . 8 8 c c 8 8 . . . . 
+        . . . . . 8 6 6 6 6 6 6 8 . . . 
+        . . . . 6 c 6 6 6 6 6 6 c 6 . . 
+        . . . 8 6 c 9 6 6 6 6 6 c 6 8 . 
+        . . . f 6 6 9 6 6 6 6 6 c 6 f . 
+        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
+        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
+        . . . f 6 c 6 9 9 6 6 6 c 6 f . 
+        . . . 8 6 c 8 c c c c 8 c 6 8 . 
+        . . . 8 6 8 c b b b b c 8 6 8 . 
+        . . . 8 6 8 b b b b b b 8 6 8 . 
+        . . . 8 8 8 8 8 8 8 8 8 8 8 8 . 
+        . . . f 8 d 8 8 8 8 8 8 d 8 f . 
+        . . . f 8 6 d 8 8 8 8 d 6 8 f . 
+        . . . f f 8 8 8 8 8 8 8 8 f f . 
+        . . . . f f . . . . . . f f . . 
+        `, 0, 50)
+    crashcar1.setPosition(75, -5)
+    crashcar1.setVelocity(0, 30)
+})
 game.onUpdateInterval(85, function () {
     movingroadside = sprites.createProjectileFromSide(img`
         ddddddddddddbbbbbbbbdddddddbddddbbbbbbddddddddddddbbbbbbddddddddddddddbbbbbdddddddddd
@@ -204,6 +224,7 @@ forever(function () {
     }
     if (info.score() == 72) {
         coinplacement()
+        game.splash("high score")
     }
 })
 forever(function () {
@@ -265,50 +286,6 @@ game.onUpdateInterval(10000, function () {
         . . . f f 8 8 8 8 8 8 8 8 f f . 
         . . . . f f . . . . . . f f . . 
         `, 0, 50)
-    crashcar1.setPosition(100, 80)
-    crashcar1.setVelocity(0, 30)
-})
-game.onUpdateInterval(10000, function () {
-    crashcar1 = sprites.createProjectileFromSide(img`
-        . . . . . . 8 8 c c 8 8 . . . . 
-        . . . . . 8 6 6 6 6 6 6 8 . . . 
-        . . . . 6 c 6 6 6 6 6 6 c 6 . . 
-        . . . 8 6 c 9 6 6 6 6 6 c 6 8 . 
-        . . . f 6 6 9 6 6 6 6 6 c 6 f . 
-        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
-        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
-        . . . f 6 c 6 9 9 6 6 6 c 6 f . 
-        . . . 8 6 c 8 c c c c 8 c 6 8 . 
-        . . . 8 6 8 c b b b b c 8 6 8 . 
-        . . . 8 6 8 b b b b b b 8 6 8 . 
-        . . . 8 8 8 8 8 8 8 8 8 8 8 8 . 
-        . . . f 8 d 8 8 8 8 8 8 d 8 f . 
-        . . . f 8 6 d 8 8 8 8 d 6 8 f . 
-        . . . f f 8 8 8 8 8 8 8 8 f f . 
-        . . . . f f . . . . . . f f . . 
-        `, 0, 50)
-    crashcar1.setPosition(60, 49)
-    crashcar1.setVelocity(0, 30)
-})
-game.onUpdateInterval(10000, function () {
-    crashcar1 = sprites.createProjectileFromSide(img`
-        . . . . . . 8 8 c c 8 8 . . . . 
-        . . . . . 8 6 6 6 6 6 6 8 . . . 
-        . . . . 6 c 6 6 6 6 6 6 c 6 . . 
-        . . . 8 6 c 9 6 6 6 6 6 c 6 8 . 
-        . . . f 6 6 9 6 6 6 6 6 c 6 f . 
-        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
-        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
-        . . . f 6 c 6 9 9 6 6 6 c 6 f . 
-        . . . 8 6 c 8 c c c c 8 c 6 8 . 
-        . . . 8 6 8 c b b b b c 8 6 8 . 
-        . . . 8 6 8 b b b b b b 8 6 8 . 
-        . . . 8 8 8 8 8 8 8 8 8 8 8 8 . 
-        . . . f 8 d 8 8 8 8 8 8 d 8 f . 
-        . . . f 8 6 d 8 8 8 8 d 6 8 f . 
-        . . . f f 8 8 8 8 8 8 8 8 f f . 
-        . . . . f f . . . . . . f f . . 
-        `, 0, 50)
     crashcar1.setPosition(60, 0)
     crashcar1.setVelocity(0, 30)
 })
@@ -332,5 +309,49 @@ game.onUpdateInterval(10000, function () {
         . . . . f f . . . . . . f f . . 
         `, 0, 50)
     crashcar1.setPosition(100, 30)
+    crashcar1.setVelocity(0, 30)
+})
+game.onUpdateInterval(10000, function () {
+    crashcar1 = sprites.createProjectileFromSide(img`
+        . . . . . . 8 8 c c 8 8 . . . . 
+        . . . . . 8 6 6 6 6 6 6 8 . . . 
+        . . . . 6 c 6 6 6 6 6 6 c 6 . . 
+        . . . 8 6 c 9 6 6 6 6 6 c 6 8 . 
+        . . . f 6 6 9 6 6 6 6 6 c 6 f . 
+        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
+        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
+        . . . f 6 c 6 9 9 6 6 6 c 6 f . 
+        . . . 8 6 c 8 c c c c 8 c 6 8 . 
+        . . . 8 6 8 c b b b b c 8 6 8 . 
+        . . . 8 6 8 b b b b b b 8 6 8 . 
+        . . . 8 8 8 8 8 8 8 8 8 8 8 8 . 
+        . . . f 8 d 8 8 8 8 8 8 d 8 f . 
+        . . . f 8 6 d 8 8 8 8 d 6 8 f . 
+        . . . f f 8 8 8 8 8 8 8 8 f f . 
+        . . . . f f . . . . . . f f . . 
+        `, 0, 50)
+    crashcar1.setPosition(100, 80)
+    crashcar1.setVelocity(0, 30)
+})
+game.onUpdateInterval(10000, function () {
+    crashcar1 = sprites.createProjectileFromSide(img`
+        . . . . . . 8 8 c c 8 8 . . . . 
+        . . . . . 8 6 6 6 6 6 6 8 . . . 
+        . . . . 6 c 6 6 6 6 6 6 c 6 . . 
+        . . . 8 6 c 9 6 6 6 6 6 c 6 8 . 
+        . . . f 6 6 9 6 6 6 6 6 c 6 f . 
+        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
+        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
+        . . . f 6 c 6 9 9 6 6 6 c 6 f . 
+        . . . 8 6 c 8 c c c c 8 c 6 8 . 
+        . . . 8 6 8 c b b b b c 8 6 8 . 
+        . . . 8 6 8 b b b b b b 8 6 8 . 
+        . . . 8 8 8 8 8 8 8 8 8 8 8 8 . 
+        . . . f 8 d 8 8 8 8 8 8 d 8 f . 
+        . . . f 8 6 d 8 8 8 8 d 6 8 f . 
+        . . . f f 8 8 8 8 8 8 8 8 f f . 
+        . . . . f f . . . . . . f f . . 
+        `, 0, 50)
+    crashcar1.setPosition(60, 49)
     crashcar1.setVelocity(0, 30)
 })
