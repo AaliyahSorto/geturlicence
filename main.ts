@@ -2,44 +2,57 @@ namespace SpriteKind {
     export const Crashpart = SpriteKind.create()
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
-    info.stopCountdown()
+    scene.cameraShake(4, 1000)
+    pause(1000)
+    music.play(music.melodyPlayable(music.smallCrash), music.PlaybackMode.UntilDone)
+    sprites.destroy(crashcar1)
+    heyAnswering("0")
 })
-function Askquestionandcheckanswer (questionnumber: number) {
-    screenText = ""
-    correctAnswer = 0
-    if (questionnumber == 1) {
-        questionText = questions[0]
+function checkAnswer (answer: string) {
+    if (answer != "") {
+        correctAnswer = correctAnswers[currentQuestionIndex]
     }
-    if (questionnumber == 2) {
-        questionText = questions[1]
+    if (answer == correctAnswer) {
+        game.splash("Good Job!")
+        currentQuestionIndex += 1
+    } else if (answer != correctAnswer) {
+        game.splash("Wrong! Try again.")
     }
-    if (questionnumber == 3) {
-        questionText = questions[2]
+    if (currentQuestionIndex < questions.length) {
+        game.splash(questions[currentQuestionIndex])
+        for (let option22 of options[currentQuestionIndex]) {
+            game.splash(option22)
+        }
+        game.splash("Pick A or B")
+        playerAnswer2 = game.askForString("", 1)
+        checkAnswer(playerAnswer2)
     }
-    if (questionnumber == 4) {
-        questionText = questions[3]
+}
+function heyAnswering (answer: string) {
+    if (answer != "") {
+        correctAnswer = correctAnswers[currentQuestionIndex]
     }
-    if (questionnumber == 5) {
-        questionText = questions[4]
+    if (answer == "0") {
+        game.splash("You crashed")
+    } else if (answer == correctAnswer) {
+        game.splash("Good Job!")
+        currentQuestionIndex += 1
+    } else {
+        game.splash("Wrong! Try again.")
     }
-    if (questionnumber == 6) {
-        questionText = questions[5]
-    }
-    if (questionnumber == 7) {
-        questionText = questions[6]
-    }
-    if (questionnumber == 8) {
-        questionText = questions[7]
-    }
-    if (questionnumber == 9) {
-        questionText = questions[8]
-    }
-    if (questionnumber == 10) {
-        questionText = questions[9]
+    if (currentQuestionIndex < questions.length) {
+        game.splash(questions[currentQuestionIndex])
+        for (let option2 of options[currentQuestionIndex]) {
+            game.splash(option2)
+        }
+        game.splash("Pick A or B")
+        playerAnswer2 = game.askForString("", 1)
+        checkAnswer(playerAnswer2)
     }
 }
 function coinplacement () {
     for (let value of tiles.getTilesByType(assets.tile`myTile2`)) {
+        tiles.placeOnTile(coin, value)
         coin = sprites.create(img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
@@ -58,7 +71,6 @@ function coinplacement () {
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `, SpriteKind.Food)
-        tiles.placeOnTile(coin, value)
     }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
@@ -66,7 +78,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     info.changeScoreBy(1)
 })
 function Quickintro () {
-    story.printCharacterText("Collect the coins and watch out for the cars! If you crash try answering the questions quickly.", "Welcome to GetURLicense")
+    story.printCharacterText("Collect the coins and watch out for the cars! Answer the 3 questions.", "Welcome to GetURLicense")
     game.splash("Are you ready?")
     pause(200)
     story.showPlayerChoices("Yes", "Maybe")
@@ -75,19 +87,30 @@ function Quickintro () {
         info.startCountdown(40)
     } else if (story.checkLastAnswer("Maybe")) {
         game.splash("Get ready!!!")
+        game.splash("3")
+        game.splash("2")
+        game.splash("1")
         info.startCountdown(40)
     }
 }
-let crashcar1: Sprite = null
 let movingroadside2: Sprite = null
 let movingroadside: Sprite = null
 let coin: Sprite = null
-let questionText: string[] = []
-let correctAnswer = 0
-let screenText = ""
-let questions: string[][] = []
-let Currentquestion = 0
-music.play(music.stringPlayable("- - - - - - - - ", 120), music.PlaybackMode.UntilDone)
+let playerAnswer2 = ""
+let correctAnswer = ""
+let crashcar1: Sprite = null
+let correctAnswers: string[] = []
+let options: string[][] = []
+let questions: string[] = []
+let currentQuestionIndex = 0
+let playerAnswer23 = ""
+let correctAnswer2 = ""
+let playerAnswer22 = ""
+currentQuestionIndex = 0
+questions = ["What is the shape of a stop sign?", "Who may use shared lanes?", "How often must motor vehicles be inspected?"]
+options = [["A)Octagon", "B)Circle"], ["A)Bicyclist", "B)Motorcyclist"], ["A)Once a year", "B)Once every two years "]]
+correctAnswers = ["a", "a", "a"]
+let list = [0, 1]
 let playerscar = sprites.create(img`
     . . . . . . a a c c a a . . . . 
     . . . . . a 3 3 3 3 3 3 a . . . 
@@ -110,106 +133,9 @@ playerscar.setPosition(56, 95)
 playerscar.setStayInScreen(true)
 controller.moveSprite(playerscar, 100, 100)
 tiles.setCurrentTilemap(tilemap`level6`)
-questions = [
-[
-"A stop sign is shaped like a(n):",
-"Rectangle",
-"Circle",
-"Octagon"
-],
-[
-"What should you do when driving in fog?",
-"Use your low beams",
-"Use your parking lights",
-"Use your high beams"
-],
-[
-"When making a right turn, what should you NOT do?",
-"Signal to other drivers",
-"Swing to wide for your lane",
-"Slow down"
-],
-[
-"If an officer is directing traffic, what should you do?",
-"Follow the directions indicated by the traffic light",
-"Follow the instructions given by the officer",
-"Check to see what the other cars are doing"
-],
-[
-"Who can use the shared lanes?",
-"Bicyclists",
-"Truck drivers",
-"Motorcyclist"
-],
-[
-"When should you allow a larger space cushion than usual when stopping?",
-"On an incline",
-"At a stop sign",
-"At an intersection"
-],
-[
-"Unless posted otherwise, what is the speed limit of an alley?",
-"15 mph",
-"30 mph",
-"45 mph"
-],
-[
-"What is hardest to see at night while driving?",
-"Road signs",
-"Street lights",
-"Pedestrians"
-],
-[
-"How often must motor vehicles be inspected?",
-"Once every year",
-"Once every four years",
-"Once every three years"
-],
-[
-"What is the most common color of warning signs?",
-"Yellow",
-"Green",
-"Red"
-]
-]
 info.setScore(0)
 Quickintro()
 coinplacement()
-let crashProduct = [img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . d d d . . . . 
-    . . . . . . . d d d d d . . . . 
-    . . . . . d d d d d d d . . . . 
-    . . . . d d d d d d d . . . . . 
-    . . . d d d d d d d . . . . . . 
-    . . . d d d d d d . . . . . . . 
-    . . . d d d d d . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    `, img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . e e . . . . 
-    . . . . . . . . e e e e . . . . 
-    . . . . . . . e e e e e . . . . 
-    . . . . . . . e e e e e . . . . 
-    . . . . . . e e e e e e . . . . 
-    . . . . . e e e e e e e e . . . 
-    . . . . . e e e e e e e e . . . 
-    . . . . e e e e e e e e . . . . 
-    . . . e e e e e e e . . . . . . 
-    . . . e e e e e e . . . . . . . 
-    . . . e e e . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    `]
 game.onUpdateInterval(85, function () {
     movingroadside = sprites.createProjectileFromSide(img`
         ddddddddddddbbbbbbbbdddddddbddddbbbbbbddddddddddddbbbbbbddddddddddddddbbbbbdddddddddd
@@ -281,6 +207,26 @@ forever(function () {
     }
 })
 forever(function () {
+    if (info.score() == 96) {
+        coinplacement()
+    }
+    if (info.score() == 108) {
+        coinplacement()
+    }
+    if (info.score() == 120) {
+        coinplacement()
+    }
+    if (info.score() == 132) {
+        coinplacement()
+    }
+    if (info.score() == 144) {
+        coinplacement()
+    }
+    if (info.score() == 156) {
+        coinplacement()
+    }
+})
+forever(function () {
     if (info.score() == 144) {
         coinplacement()
     }
@@ -296,23 +242,31 @@ forever(function () {
     if (info.score() == 192) {
         coinplacement()
     }
-})
-forever(function () {
     if (info.score() == 84) {
         coinplacement()
     }
-    if (info.score() == 96) {
-        coinplacement()
-    }
-    if (info.score() == 108) {
-        coinplacement()
-    }
-    if (info.score() == 120) {
-        coinplacement()
-    }
-    if (info.score() == 132) {
-        coinplacement()
-    }
+})
+game.onUpdateInterval(10000, function () {
+    crashcar1 = sprites.createProjectileFromSide(img`
+        . . . . . . 8 8 c c 8 8 . . . . 
+        . . . . . 8 6 6 6 6 6 6 8 . . . 
+        . . . . 6 c 6 6 6 6 6 6 c 6 . . 
+        . . . 8 6 c 9 6 6 6 6 6 c 6 8 . 
+        . . . f 6 6 9 6 6 6 6 6 c 6 f . 
+        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
+        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
+        . . . f 6 c 6 9 9 6 6 6 c 6 f . 
+        . . . 8 6 c 8 c c c c 8 c 6 8 . 
+        . . . 8 6 8 c b b b b c 8 6 8 . 
+        . . . 8 6 8 b b b b b b 8 6 8 . 
+        . . . 8 8 8 8 8 8 8 8 8 8 8 8 . 
+        . . . f 8 d 8 8 8 8 8 8 d 8 f . 
+        . . . f 8 6 d 8 8 8 8 d 6 8 f . 
+        . . . f f 8 8 8 8 8 8 8 8 f f . 
+        . . . . f f . . . . . . f f . . 
+        `, 0, 50)
+    crashcar1.setPosition(100, 80)
+    crashcar1.setVelocity(0, 30)
 })
 game.onUpdateInterval(10000, function () {
     crashcar1 = sprites.createProjectileFromSide(img`
@@ -378,27 +332,5 @@ game.onUpdateInterval(10000, function () {
         . . . . f f . . . . . . f f . . 
         `, 0, 50)
     crashcar1.setPosition(100, 30)
-    crashcar1.setVelocity(0, 30)
-})
-game.onUpdateInterval(10000, function () {
-    crashcar1 = sprites.createProjectileFromSide(img`
-        . . . . . . 8 8 c c 8 8 . . . . 
-        . . . . . 8 6 6 6 6 6 6 8 . . . 
-        . . . . 6 c 6 6 6 6 6 6 c 6 . . 
-        . . . 8 6 c 9 6 6 6 6 6 c 6 8 . 
-        . . . f 6 6 9 6 6 6 6 6 c 6 f . 
-        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
-        . . . f 6 6 9 6 6 6 6 6 6 6 f . 
-        . . . f 6 c 6 9 9 6 6 6 c 6 f . 
-        . . . 8 6 c 8 c c c c 8 c 6 8 . 
-        . . . 8 6 8 c b b b b c 8 6 8 . 
-        . . . 8 6 8 b b b b b b 8 6 8 . 
-        . . . 8 8 8 8 8 8 8 8 8 8 8 8 . 
-        . . . f 8 d 8 8 8 8 8 8 d 8 f . 
-        . . . f 8 6 d 8 8 8 8 d 6 8 f . 
-        . . . f f 8 8 8 8 8 8 8 8 f f . 
-        . . . . f f . . . . . . f f . . 
-        `, 0, 50)
-    crashcar1.setPosition(100, 80)
     crashcar1.setVelocity(0, 30)
 })
