@@ -44,7 +44,7 @@ function playerAnswer (answer: string) {
         for (let option2 of options[currentQuestionIndex]) {
             game.splash(option2)
         }
-        game.splash("Pick A or B")
+        game.splash("Pick a or b")
         playerAnswer2 = game.askForString("", 1)
         checkAnswer(playerAnswer2)
     }
@@ -77,9 +77,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     info.changeScoreBy(1)
 })
 function Quickintro () {
-    story.printCharacterText("Collect the coins and watch out for the cars! Answer the 3 questions.", "Welcome to GetURLicense")
+    story.printCharacterText("Collect the coins and watch out for the cars! Answer the questions.", "Welcome to GetURLicense")
+    pause(1000)
     game.splash("Are you ready?")
-    pause(200)
     story.showPlayerChoices("Yes", "Maybe")
     if (story.checkLastAnswer("Yes")) {
         game.splash("Ok, here we go")
@@ -102,12 +102,12 @@ let correctAnswers: string[] = []
 let options: string[][] = []
 let questions: string[] = []
 let currentQuestionIndex = 0
-let playerAnswer22 = ""
-let correctAnswer2 = ""
 let playerAnswer23 = ""
+let correctAnswer2 = ""
+let playerAnswer22 = ""
 currentQuestionIndex = 0
 questions = ["What is the shape of a stop sign?", "Who may use shared lanes?", "How often must motor vehicles be inspected?"]
-options = [["A)Octagon", "B)Circle"], ["A)Bicyclist", "B)Motorcyclist"], ["A)Once a year", "B)Once every two years "]]
+options = [["a)Octagon", "b)Circle"], ["a)Bicyclist", "b)Motorcyclist"], ["a)Once a year", "b)Once every two years "]]
 correctAnswers = ["a", "a", "a"]
 let playerscar = sprites.create(img`
     . . . . . . a a c c a a . . . . 
