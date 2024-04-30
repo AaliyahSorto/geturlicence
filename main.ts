@@ -234,6 +234,7 @@ forever(function () {
         coinplacement()
     }
 })
+// The game updates are starter code attained from MakeCode for micro:bit-Racer Game Part 1 link: https://www.youtube.com/watch?v=8wTYVDOyc_c
 game.onUpdateInterval(10000, function () {
     crashcar1 = sprites.createProjectileFromSide(img`
         . . . . . . 8 8 c c 8 8 . . . . 
