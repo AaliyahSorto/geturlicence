@@ -58,19 +58,14 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
 })
 function Quickintro () {
     story.printCharacterText("Collect the coins and watch out for the cars!Hope you enjoy GetURLicense :)", "Welcome to GetURLicense")
+    story.printCharacterText("Hope you are ready to play.")
+    story.printCharacterText("Ready?")
+    story.printCharacterText("3")
+    story.printCharacterText("2")
+    story.printCharacterText("1")
+    story.printCharacterText("Go!")
     pause(1000)
-    game.splash("Are you ready?")
-    story.showPlayerChoices("Yes", "Maybe")
-    if (story.checkLastAnswer("Yes")) {
-        game.splash("Ok, here we go")
-        info.startCountdown(30)
-    } else if (story.checkLastAnswer("Maybe")) {
-        game.splash("Get ready!!!")
-        game.splash("3")
-        game.splash("2")
-        game.splash("1")
-        info.startCountdown(30)
-    }
+    info.startCountdown(30)
 }
 let movingroadside2: Sprite = null
 let movingroadside: Sprite = null
@@ -234,7 +229,6 @@ forever(function () {
         coinplacement()
     }
 })
-// The game updates are starter code attained from MakeCode for micro:bit-Racer Game Part 1 link: https://www.youtube.com/watch?v=8wTYVDOyc_c
 game.onUpdateInterval(10000, function () {
     crashcar1 = sprites.createProjectileFromSide(img`
         . . . . . . 8 8 c c 8 8 . . . . 
